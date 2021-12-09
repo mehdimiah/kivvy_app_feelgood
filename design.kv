@@ -1,0 +1,169 @@
+<LoginScreen>: #creating a screen / page 
+    GridLayout: #to organise the screen
+        cols: 1
+        GridLayout:
+            cols: 1
+            padding: 15,15
+            #15 horizontally outside space of the grid layout
+            spacing: 20,20
+            #between the widgets inside the grid layout 
+            Label:
+                text:"Login"
+                #adding a widget
+                font_size: '20sp'
+                #must be string, sp = space-independent pixels
+            TextInput:
+                id: username
+                hint_text: "Username"
+                #username writing in the username box
+            TextInput:
+                id: password
+                password: True
+                #text is treated as a password and non-visible
+                hint_text: "password"
+            RelativeLayout:
+            #doing this allows changing the size of the button
+                Button:
+                    text: "login"
+                    on_press: root.login(root.ids.username.text,root.ids.password.text)
+                    size_hint: 0.3,0.5
+                    # 0.5= half the height, 0.3 to squeeze horizontally
+                    #allows you to change how much a widget gets from its parent size wise
+                    pos_hint: {'center_x':0.5, 'center_y':0.6}
+                    #centers the button, it requires a dictionary input
+            Label:
+                id: login_wrong
+                text: ""
+        GridLayout:
+            cols: 2
+            size_hint: 0.2,0.2
+            padding: 10,10
+            spacing: 10,0
+            Button:
+                text: "Forgot Password?"
+                background_color: 1,1,1,0
+                #rgb values and 0 is the background colour
+                opacity: 1 if self.state == 'normal' else 0.5
+                # when button clicked it flashes, the opacity is 0.5 when clicked
+                color: 0.1,0.7,1,1
+                #colouring the text
+                on_press: root.forgotten_password()
+            Button:
+                text: "Sign Up"
+                on_press: root.sign_up()
+                #when pressed call function
+                #root refers to class of the rule loginscreen in python script
+                background_color: 1,1,1,0
+                opacity: 1 if self.state == 'normal' else 0.5
+                color: 0.1,0.7,1,1
+<SignUpScreen>:
+    GridLayout:
+        cols : 1
+        padding: 15,15
+        spacing: 20,20
+        Label:
+            text: "Sign up"
+        TextInput:
+            id : username
+            hint_text: "Username"
+        TextInput:
+            id: password
+            hint_text: "Password"
+        Button:
+            text: "Submit"
+            on_press: root.add_user(root.ids.username.text,root.ids.password.text)
+            #using root to refer to the add user function
+            #and then retrieve the inputs in the username 
+            #and password box using the ids added to them
+        Button:
+            text: "Back"
+            on_press: root.main_screen()
+
+
+<SignUpScreenSuccess>:
+    GridLayout:
+        cols : 1
+        Label:
+            text: "Sign up successful"
+        Button:
+            text: "Login page"
+            on_press: root.main_screen()
+
+<LoginScreenSuccess>:
+    GridLayout:
+        cols:1
+        padding: 30,30 
+        spacing: 30,30
+        
+        RelativeLayout:
+            ImageButton:           
+                on_press: root.log_out()
+                source: 'logout_hover.png' if self.hovered else "logout_nothover.png"
+                #setting a source image for the logout button, detecting if a mouse is over the button
+                size_hint: 0.35,0.35
+                pos_hint: {'center_x' : 0.93, 'center_y' : 0.8 }
+        Label:
+            text: "How do you feel?"
+        TextInput:
+            id: feeling
+            hint_text: "Things to try: Happy, Sad, Unloved..."
+        Button:
+            text: "Let me help"
+            on_press: root.get_quote(root.ids.feeling.text)
+        ScrollView:
+        #adds space for the scrollview function
+            Label:
+                id: quote
+                text: ""
+                text_size: self.width, None
+                #confining the text of the quote, so it isnt off the sides of the screen
+                size_hint_y: None
+                # label height is 100pixels, height attribute of the label widget itself
+                height: self.texture_size[1]
+                #contains two items in the tuple, index 1 selects height the second element
+    
+<ForgottonPassword>:
+    GridLayout:
+        cols:1
+        padding: 30,30 
+        spacing: 30,30
+        
+        Label:
+            text: "Reset your password"
+        TextInput:
+            id: reset
+            hint_text: "Enter your username"
+        Label:
+            id: preset
+            text: ""    
+            size_hint: 0.3,0.1   
+        Button:
+            text: "Submit"
+            on_press: root.reset_pass(root.ids.reset.text)
+        Button:
+            text: "Back"
+            on_press: root.main_screen()
+    
+
+
+
+
+<RootWidget>:
+    LoginScreen:
+        name: "login_Screen"
+        #this is needed for the logic written in python
+    SignUpScreen:
+        name: "sign_up_screen"
+    
+    SignUpScreenSuccess:
+        name: "sign_up_screen_success"
+    
+    LoginScreenSuccess:
+        name: "login_screen_success"
+    
+    ForgottonPassword:
+        name: "forgotten_password"
+    
+
+
+#these symbols are rules
